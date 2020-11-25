@@ -66,8 +66,8 @@ temas_e_links(URL_BASE)
 
 
 
-# extrair tema
 # extrair titulo
+# extrair tema
 # extrair redação
 # extrair nota
 # tema = 'Violência contra a mulher: por que o machismo persiste?'
