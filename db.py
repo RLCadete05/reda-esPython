@@ -50,7 +50,7 @@ def inserir_na_tabela(tabela="redacao", valores="default,'Problemas no Piauí','
   if(tabela and valores):
 
     # Tenta inserir na tabela
-    try:
+    # try:
       sql_da_insercao = "insert into {} values ({})".format(tabela, valores)
       cursor = conexao.cursor()
       cursor.execute(sql_da_insercao)
@@ -58,8 +58,8 @@ def inserir_na_tabela(tabela="redacao", valores="default,'Problemas no Piauí','
       cursor.close()
       return 'Inserido com sucesso'
     # Caso o sql informado esteja errado, retorna essa mensagem
-    except:
-      return 'Erro ao inserir, verifique seu sql'
+    # except:
+    #   return 'Erro ao inserir, verifique seu sql'
   else:
     return 'Tabela e/ou valores inválidos'
 
@@ -105,7 +105,7 @@ def deletar_tabela(tabela="redacao"):
   if(tabela):
 
     # Tenta deletar a tabela
-    # try:
+    try:
       # Sql da remoção
       sql_da_remocao = 'DROP TABLE {}'.format(tabela)
       # Cria uma ação
@@ -119,8 +119,8 @@ def deletar_tabela(tabela="redacao"):
       # Retorna os dados
       return 'Removido com sucesso'
     # Caso o sql informado esteja errado, retorna essa mensagem
-    # except:
-    #   return 'Erro ao deletar a tabela.'
+    except:
+      return 'Erro ao deletar a tabela.'
   else:
     return 'Informe a tabela e/ou condição para listar a tabela'
 
