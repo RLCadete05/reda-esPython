@@ -45,6 +45,7 @@ def extrair_titulo_e_tema(url):
     title = soup.find('div', attrs={'class': 'br-grid-3 margem-conteudo'})
     title = title.find('h1').text.strip()
     print('\nTITULO: ', title)
+
     essay = soup.find('div', attrs={'class': 'conteudo-materia'})
     for content in essay.find_all('p')[1:]:
         print('\nREDAÇÃO: ', content.text)
@@ -56,14 +57,46 @@ def get_redacoes(url):
     print(soup.find(id='redacoes_corrigidas').text)
 
 
-URL_BASE = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes'
-url_theme = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/tema-abuso-de-autoridade-no-brasil.htm'
-url_essay = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/16257'
-temas_e_links(URL_BASE)
-# get_descricao_tema(url_theme)
-# extrair_titulo_e_tema(url_essay)
-# get_redacoes(url_essay)
 
+def extrair_tema(url): 
+    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+    tema = soup.find_all('span', attrs={'class': 'definicao'})
+    #tema = tema.find('a').text.strip()
+    print(tema)
+
+def extrair_titulo(url):
+    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+    titulo = soup.find('div', attrs={'class': 'br-grid-3 margem-conteudo'})
+    titulo = titulo.find('h1').text.strip()
+    print('\nTITULO: ', titulo)
+
+def extrair_redacao(url): 
+    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+    essay = soup.find('div', attrs={'class': 'conteudo-materia'})
+    for content in essay.find_all('p')[1:]:
+        print(content.text)
+
+def extrair_nota(url):
+    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+    tabela = soup.find('table', attrs={'id': 'redacoes_corrigidas'})
+    coluna = tabela.find_all('td')[1]
+    print(soup.find(id='redacoes_corrigidas').text)
+
+
+
+
+URL_BASE = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes'
+url_tema = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/tema-abuso-de-autoridade-no-brasil.htm'
+url_redacao = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/16257'
+# temas_e_links(URL_BASE)
+# get_descricao_tema(url_tema)
+# extrair_titulo_e_tema(url_redacao)
+# get_redacoes(url_redacao)
+
+extrair_tema(url_tema)
+extrair_titulo(url_redacao)
+extrair_redacao(url_redacao)
+extrair_nota(url_redacao)
 
 
 # extrair tema
@@ -75,3 +108,5 @@ temas_e_links(URL_BASE)
 
 # return [tema, titulo]
 # retorno da função: [tema, titulo, redacao, nota]
+
+
