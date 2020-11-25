@@ -60,6 +60,18 @@ URL_BASE = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes'
 url_theme = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/tema-abuso-de-autoridade-no-brasil.htm'
 url_essay = 'https://vestibular.brasilescola.uol.com.br/banco-de-redacoes/16257'
 temas_e_links(URL_BASE)
-get_descricao_tema(url_theme)
-extrair_titulo_e_tema(url_essay)
-get_redacoes(url_essay)
+# get_descricao_tema(url_theme)
+# extrair_titulo_e_tema(url_essay)
+# get_redacoes(url_essay)
+
+
+
+# extrair tema
+# extrair titulo
+# extrair redação
+# extrair nota
+# tema = 'Violência contra a mulher: por que o machismo persiste?'
+# titulo = 'INVOLUÇÃO HUMANA: MACHISMO E VIOLÊNCIA CONTRA A MULHER'
+
+# return [tema, titulo]
+# retorno da função: [tema, titulo, redacao, nota]
