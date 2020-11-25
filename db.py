@@ -22,9 +22,9 @@ def criar_tabela(tabela="redacao", colunas="id serial primary key, titulo varcha
   if(tabela and colunas):
     # Tenta criar a tabela
     try:
-      sqlDaCriacaoDaTabela = "create table {} ({})".format(tabela, colunas)
+      sql_da_criacao_da_tabela = "create table {} ({})".format(tabela, colunas)
       cursor = conexao.cursor()
-      cursor.execute(sqlDaCriacaoDaTabela)
+      cursor.execute(sql_da_criacao_da_tabela)
       conexao.commit() #
       cursor.close()
       return 'Criada com sucesso'
@@ -34,6 +34,7 @@ def criar_tabela(tabela="redacao", colunas="id serial primary key, titulo varcha
     # Caso a tabela já exista, vai retornar essa mensagem
     except:
       return 'A tabela já existe'
+  # Caso não seja informado os parâmetros
   else:
     return 'Informe a tabela e/ou colunas da nova tabela'
 
@@ -50,9 +51,9 @@ def inserir_na_tabela(tabela="redacao", valores="default,'Problemas no Piauí','
 
     # Tenta inserir na tabela
     try:
-      sqlDaInsercao = "insert into {} values ({})".format(tabela, valores)
+      sql_da_insercao = "insert into {} values ({})".format(tabela, valores)
       cursor = conexao.cursor()
-      cursor.execute(sqlDaInsercao)
+      cursor.execute(sql_da_insercao)
       conexao.commit()
       cursor.close()
       return 'Inserido com sucesso'
@@ -75,11 +76,11 @@ def listar_dados_da_tabela(tabela="redacao", condicao="*"):
     # Tenta retornar os dados da tabela
     try:
       # Sql da select
-      sqlDaSelecao = 'select {} from {}'.format(condicao, tabela)
+      sql_da_selecao = 'select {} from {}'.format(condicao, tabela)
       # Cria uma ação
       cursor = conexao.cursor()
       # Executa uma ação, passando o comando sql
-      cursor.execute(sqlDaSelecao)
+      cursor.execute(sql_da_selecao)
       # Retorna todo o resultado
       dados = cursor.fetchall()
       # Comenta o resultado
@@ -94,9 +95,34 @@ def listar_dados_da_tabela(tabela="redacao", condicao="*"):
   else:
     return 'Informe a tabela e/ou condição para listar a tabela'
 
+def deletar_tabela(tabela="redacao"):
+   # Conectando ao banco
+  conexao = conectar()
+  # Caso ocorra erro na conexão com o banco, nem executará o resto da função
+  if(not conexao):
+    return 'Erro na conexão com o banco'
+  # Se for informado a tabela e a condição
+  if(tabela):
 
-# Exemplos de chamadas usando valores padrão
-# print(criarTabela())
-# print(inserirNaTabela())
-# print(listarDadosDaTabela())
+    # Tenta deletar a tabela
+    # try:
+      # Sql da remoção
+      sql_da_remocao = 'DROP TABLE {}'.format(tabela)
+      # Cria uma ação
+      cursor = conexao.cursor()
+      # Executa uma ação, passando o comando sql
+      cursor.execute(sql_da_remocao)
+      # Comenta o resultado
+      conexao.commit()
+      # Finaliza a ação
+      cursor.close()
+      # Retorna os dados
+      return 'Removido com sucesso'
+    # Caso o sql informado esteja errado, retorna essa mensagem
+    # except:
+    #   return 'Erro ao deletar a tabela.'
+  else:
+    return 'Informe a tabela e/ou condição para listar a tabela'
+
+
 
