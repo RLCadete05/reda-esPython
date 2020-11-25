@@ -99,8 +99,8 @@ extrair_redacao(url_redacao)
 extrair_nota(url_redacao)
 
 
-# extrair tema
 # extrair titulo
+# extrair tema
 # extrair redação
 # extrair nota
 # tema = 'Violência contra a mulher: por que o machismo persiste?'
