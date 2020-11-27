@@ -8,56 +8,49 @@ def get_pagina_existente(url):
     content = requests.get(url.strip())
     return False if content.status_code == 404 else content.content
 
-#ainda n funciona
-def temas_e_links(url):
+def get_link_dos_temas():
+    soup = BeautifulSoup(get_pagina_existente('https://educacao.uol.com.br/bancoderedacoes/'), 'lxml')
+    temas = soup.select('.thumbnails-wrapper > a')
+    links_dos_temas = []
+    for tema in temas:
+        links_dos_temas.append(tema.get('href'))
+    return links_dos_temas
+
+
+def get_propostas(url):
     soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
-    #select = soup.find('select', attrs={'id': 'selectBoxBR'})
-    options = soup.select('select[class=thumbnails-wrapper]> option')
-    for option in options[1:]:
-        print("TEMAS: ", option['value'] + '->' + option.link)
+    propostas = soup.select('.rt-line-option > a')
+    links_das_propostas = []
+    for proposta in propostas:
+        links_das_propostas.append(proposta.get('href'))
+    return links_das_propostas
 
-        
-def get_descricao_tema(url):
+
+def get_redacao(url):
     soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
-    description = soup.find('span', attrs={'class': 'text'})
-    spans = description.find_all('span')#Erro com find_all
-    print(spans[11].description)
+    tema = soup.select('.custom-title')[0].text
+    titulo = soup.select('.container-composition > h2')[0].text
+    paragrafos_da_redacao = soup.select('.text-composition > P')
+    redacao_completa = ''
+    for redacao in paragrafos_da_redacao:
+        redacao_completa += redacao.text
+    notas = soup.select('.points')[:6]
+    lista_de_notas = []
+    for nota in notas:
+        lista_de_notas.append(float(nota.text))
+    return [tema.replace("'", "`"), titulo.replace("'", "`"), redacao_completa.replace("'", "`"), lista_de_notas]
 
 
-def extrair_titulo_e_tema(url):
-    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
-    #print(soup.find('p', attrs={'class': 'text-composition'}))
-    '''try:
-        theme = soup.find_all('div', attrs={'class': 'container-composition'}).h2
-        print('TEMA: ', theme)
-    except Exception as e:
-        try:
-            theme = soup.find('p', attrs={'class': 'gmail-paragraph'})
-            theme = theme.find('span').text.strip()
-            print(theme)
-        except Exception as e:
-            print(e)'''
-    print('TEMA: ', soup.find('div', attrs={'class': 'container-composition'}).h2)
-    title = soup.find('div', attrs={'class': 'container-composition'})
-    title = title.find('h2').text.strip()
-    print('\nTITULO: ', title)
-    essay = soup.find('div', attrs={'class': 'text-composition'})
-    for content in essay.find_all('p')[0:]:
-        print('\nREDAÇÃO: ', content.text)
-
-def get_redacoes(url):
-    soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
-    print('\nNOTA FINAL: ', soup.find('article', attrs={'class': 'rt-body'}).text)
+def get_todas_as_redacoes():
+    temas = get_link_dos_temas()
+    lista_de_redacoes = []
+    index = 0
+    for tema in temas:
+        propostas = get_propostas(tema)
+        for proposta in propostas:
+            index += 1
+            print(index)
+            lista_de_redacoes.append(get_redacao(proposta))
+    return lista_de_redacoes
 
 
-
-URL_BASE = 'https://educacao.uol.com.br/bancoderedacoes/'
-url_theme = 'https://educacao.uol.com.br/bancoderedacoes/propostas/qualificacao-e-o-futuro-do-emprego.htm'
-url_essay = 'https://educacao.uol.com.br/bancoderedacoes/redacoes/qualificacoes-para-o-mercado-de-trabalho.htm'
-
-temas_e_links(URL_BASE)
-#get_descricao_tema(url_theme)
-#get_redacoes(url_theme)
-
-#extrair_titulo_e_tema(url_essay)
-get_redacoes(url_essay)
