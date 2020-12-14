@@ -1,41 +1,42 @@
+from Redacoes import Redacoes
 import requests
 from bs4 import BeautifulSoup
 
-# verificar se a página está disponível
-def get_pagina_existente(url):
-    content = requests.get(url.strip())
-    return False if content.status_code == 404 else content.content
 
-def extrair_tema(url):
+class BrasilEscola(Redacoes):
+  def __init__(self, titulo='', html='', notas=''):
+    super().__init__(titulo, html, notas)
+  
+  def extrairTema(self, url):
     try:
-        soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+        soup = BeautifulSoup(self.getPaginaExistente(url), 'lxml')
         tema = soup.find('span', { 'class': 'definicao' }).text
         return tema.replace('Tema: ', '').strip()
     except:
         return 'Não possui tema'
 
-def extrair_titulo(url):
+  def extrairTitulo(self, url):
     try:
-        soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+        soup = BeautifulSoup(self.getPaginaExistente(url), 'lxml')
         titulo = soup.h1.text
         return titulo.strip()
     except:
         return 'Não possui título'
 
-def extrair_redacao(url):
+  def extrairRedacao(self, url):
     try:
-        soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+        soup = BeautifulSoup(self.getPaginaExistente(url), 'lxml')
         container = soup.find('div', { "class": "conteudo-materia" })
         texto_da_redacao = ''
         for redacao in container.find_all('p')[1:-3]:
-            texto_da_redacao += redacao.text
-        return texto_da_redacao.replace("'", "")
+            texto_da_redacao += '{}'.format(redacao)
+        return texto_da_redacao.replace("'", "`")
     except:
         return 'O texto não foi extraido devido ter aspas simples'
 
-def extrair_nota(url):
+  def extrairNota(self, url):
     try:
-        soup = BeautifulSoup(get_pagina_existente(url), 'lxml')
+        soup = BeautifulSoup(self.getPaginaExistente(url), 'lxml')
         competencias = soup.find(id='redacoes_corrigidas')
         notas = competencias.find_all('td', { 'style': 'text-align:center; border:solid 1px #cecece; border-left:none;' })
         notas_por_competencia = []
@@ -47,9 +48,9 @@ def extrair_nota(url):
     except:
         return [ 0 ]
 
-def pegar_redacao(url):
-    tema = extrair_tema(url)
-    titulo = extrair_titulo(url)
-    texto_da_redacao = extrair_redacao(url)
-    notas = extrair_nota(url)
+  def getRedacao(self, url):
+    tema = self.extrairTema(url)
+    titulo = self.extrairTitulo(url)
+    texto_da_redacao = self.extrairRedacao(url)
+    notas = self.extrairNota(url)
     return [tema, titulo, texto_da_redacao, notas]

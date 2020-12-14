@@ -123,6 +123,3 @@ def deletar_tabela(tabela="redacao"):
       return 'Erro ao deletar a tabela.'
   else:
     return 'Informe a tabela e/ou condição para listar a tabela'
-
-
-
